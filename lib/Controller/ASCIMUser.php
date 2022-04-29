@@ -100,8 +100,10 @@ abstract class ASCIMUser extends ApiController {
             'userName' => $userId,
             'displayName' => $targetUserObject->getDisplayName(),
             'emails' => [
+				[
 				'primary' => true,
                 'value' => $targetUserObject->getSystemEMailAddress()
+				]
 			],
             //'groups' => [],
             'active' => (bool) $this->config->getUserValue($userId, 'core', 'enabled', 'true') === 'true'
