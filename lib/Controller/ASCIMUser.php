@@ -88,6 +88,8 @@ abstract class ASCIMUser extends ApiController {
 			throw new SCIMException('User not found', 404);
 		}
 
+		$enabled = $this->config->getUserValue($targetUserObject->getUID(), 'core', 'enabled', 'true') === 'true';
+
 		return [
             'schemas' => ["urn:ietf:params:scim:schemas:core:2.0:User"],
             'id' => $userId,
@@ -106,7 +108,7 @@ abstract class ASCIMUser extends ApiController {
 				]
 			],
             //'groups' => [],
-            'active' => (bool) $this->config->getUserValue($userId, 'core', 'enabled', 'true') === 'true'
+            'active' => $enabled
         ];
 	}
 

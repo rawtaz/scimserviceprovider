@@ -157,9 +157,9 @@ class UserController extends ASCIMUser {
 	 * @return SCIMResourceResponse
 	 * @throws SCIMException
 	 */
-	public function create( bool $active = true,
+	public function create( bool   $active = true,
 	                        string $displayName = '',
-							array $emails = [],
+							array  $emails = [],
 							string $userName = ''): SCIMResourceResponse {
 		if ($this->userManager->userExists($userName)) {
 			$this->logger->error('Failed createUser attempt: User already exists.', ['app' => 'SCIMServiceProvider']);
@@ -175,6 +175,7 @@ class UserController extends ASCIMUser {
 					$newUser->setEMailAddress($email['value']);
 				}
 			}
+			$newUser->setEnabled($active);
 			return new SCIMResourceResponse($this->getSCIMUser($userName));
 		} catch (SCIMException $e) {
 			$this->logger->warning('Failed createUser attempt with SCIMException exeption.', ['app' => 'SCIMServiceProvider']);
@@ -206,6 +207,9 @@ class UserController extends ASCIMUser {
 			if ($email['primary'] === true) {
 				$targetUser->setEMailAddress($email['value']);
 			}
+		}
+		if (isset($active)) {
+			$targetUser->setEnabled($active);
 		}
 		return new SCIMResourceResponse($this->getSCIMUser($id));
 
