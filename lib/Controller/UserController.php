@@ -118,7 +118,7 @@ class UserController extends ASCIMUser {
 			$SCIMUser = $this->getSCIMUser($userId);
 			// Do not insert empty entry
 			if (!empty($SCIMUser)) {
-				$SCIMUsers[$userId] = $SCIMUser;
+				$SCIMUsers[] = $SCIMUser;
 			} else {
 				// Logged user does not have permissions to see this user
 				// only showing its id
