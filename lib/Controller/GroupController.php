@@ -175,30 +175,21 @@ class GroupController extends ASCIMGroup {
 	 *
 	 * @param string $id
 	 * 
-	 * @param bool   $active
 	 * @param string $displayName
-     * @param array  $emails
+     * @param array  $members
 	 * @return DataResponse
 	 * @throws Exception
 	 */
 	public function update( string $id,
-							bool   $active,
 							string $displayName = '',
-							array  $emails = []): SCIMJSONResponse {
-		$targetUser = $this->userManager->get($id);
-		if ($targetUser === null) {
-			return new SCIMErrorResponse(['message' => 'User not found'], 404);
+							array  $members = []): SCIMJSONResponse {
+		$group = $this->groupManager->get($id);
+		foreach ($members as $member) {
+			$targetUser = $this->userManager->get($member['value']);
+			$group->addUser($targetUser);
+			// todo implement member removal (:
 		}
-		foreach ($emails as $email) {
-			if ($email['primary'] === true) {
-				$targetUser->setEMailAddress($email['value']);
-			}
-		}
-		if (isset($active)) {
-			$targetUser->setEnabled($active);
-		}
-		return new SCIMJSONResponse($this->getSCIMUser($id));
-
+		return new SCIMJSONResponse($this->getSCIMGroup($id));
 	}
 
 	/**
