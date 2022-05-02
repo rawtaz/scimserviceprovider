@@ -2,9 +2,7 @@
 
 This app allows to provision users and groups in Nextcloud from a scim client.
 
-You can see the video that shows how it works.
-
-![video presentation](https://hot-objects.liiib.re/meet-liiib-re-recordings/pair_2022-05-02-15-40-37.mp4)
+You can see the [video](https://hot-objects.liiib.re/meet-liiib-re-recordings/pair_2022-05-02-15-40-37.mp4) that shows how it works.
 
 ## How to use
 
