@@ -14,7 +14,7 @@ For CI, there is still [a bug](https://github.com/Kong/insomnia/issues/4747) we 
 
 ```
 cd apps
-wget https://lab.libreho.st/libre.sh/scim/nextcloud-scim/-/archive/test-branch/nextcloud-scim-main.zip
+wget https://lab.libreho.st/libre.sh/scim/nextcloud-scim/-/archive/main/nextcloud-scim-main.zip
 unzip nextcloud-scim-main.zip
 rm nextcloud-scim-main.zip
 rm -rf scimserviceprovider
