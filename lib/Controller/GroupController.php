@@ -145,11 +145,11 @@ class GroupController extends ASCIMGroup {
 	public function create( string $displayName = '',
 							array  $members = []): SCIMJSONResponse {
 		
-		$id=urldecode($displayName);
+		$id = urlencode($displayName);
 		// Validate name
 		if (empty($id)) {
 			$this->logger->error('Group name not supplied', ['app' => 'provisioning_api']);
-			return new SCIMErrorResponse(['message' => 'Invalid group name'], 101);
+			return new SCIMErrorResponse(['message' => 'Invalid group name'], 400);
 		}
 		// Check if it exists
 		if ($this->groupManager->groupExists($id)) {
@@ -159,10 +159,9 @@ class GroupController extends ASCIMGroup {
 		if ($group === null) {
 			return new SCIMErrorResponse(['message' => 'Not supported by backend'], 103);
 		}
-		if ($displayname !== '') {
-			$group->setDisplayName($displayName);
-		}
+		$group->setDisplayName($displayName);
 		foreach ($members as $member) {
+			$this->logger->error('Group name not supplied' . $member['value'], ['app' => 'provisioning_api']);
 			$targetUser = $this->userManager->get($member['value']);
 			$group->addUser($targetUser);
 		}
@@ -184,6 +183,9 @@ class GroupController extends ASCIMGroup {
 							string $displayName = '',
 							array  $members = []): SCIMJSONResponse {
 		$group = $this->groupManager->get($id);
+		if (!$this->groupManager->groupExists($id)) {
+			return new SCIMErrorResponse(['message' => 'Group not found'], 404);
+		}
 		foreach ($members as $member) {
 			$targetUser = $this->userManager->get($member['value']);
 			$group->addUser($targetUser);
