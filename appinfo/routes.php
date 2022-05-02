@@ -27,6 +27,7 @@
  */
 return [
 	'resources' => [
-		'user' => ['url' => '/Users']
+		'user' => ['url' => '/Users'],
+		'group' => ['url' => '/Groups']
 	]
 ];
