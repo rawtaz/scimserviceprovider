@@ -1,0 +1,16 @@
+_id: ut_3e40e630bb434b888548336d23039c5d
+type: UnitTest
+parentId: uts_429299a4eccb41d587546701419d1687
+modified: 1651483474016
+created: 1651143728650
+requestId: req_a94c79a2fd0a49b3b3c3d71966d96d5a
+name: Get /User/test
+code: >
+  const response1 = await insomnia.send();
+
+  const body = JSON.parse(response1.data);
+
+
+  expect(response1.status).to.equal(200);
+
+  expect(body.emails.find(x => x.primary === true).value).to.equal('another@example.net');

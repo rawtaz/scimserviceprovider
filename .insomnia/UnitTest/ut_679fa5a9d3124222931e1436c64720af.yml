@@ -1,0 +1,15 @@
+_id: ut_679fa5a9d3124222931e1436c64720af
+type: UnitTest
+parentId: uts_429299a4eccb41d587546701419d1687
+modified: 1651483466991
+created: 1651047628255
+requestId: req_61c232ba3e5145fdbdeaf76283bbdae8
+name: Get /Users
+code: |+
+  const response = await insomnia.send();
+  expect(response.status).to.equal(200);
+  const body = JSON.parse(response.data);
+  //console.log(body);
+  expect(body.Resources).to.be.an('array');
+  expect(body.Resources[0].id).to.equal('admin');
+
