@@ -1,0 +1,32 @@
+_id: req_a94c79a2fd0a49b3b3c3d71966d96d5a
+type: Request
+parentId: fld_0f6f8e8898c848a7b3e1a0455c1c6e51
+modified: 1651486263941
+created: 1651052819243
+url: "{{base}}/Users/test"
+name: Users/:id
+description: ""
+method: GET
+body: {}
+parameters: []
+headers:
+  - name: OCS-APIRequest
+    value: "true"
+    id: pair_c30cf624f2224f5da06b969ac312e964
+    disabled: true
+  - name: Accept
+    value: application/json
+    id: pair_57ba1e6e793a48d68cd1947c8415875a
+    disabled: true
+authentication:
+  username: admin
+  password: admin
+  type: basic
+metaSortKey: -1651046796965
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

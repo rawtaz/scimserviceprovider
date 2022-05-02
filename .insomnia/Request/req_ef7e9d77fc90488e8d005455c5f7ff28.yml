@@ -1,0 +1,52 @@
+_id: req_ef7e9d77fc90488e8d005455c5f7ff28
+type: Request
+parentId: fld_0f6f8e8898c848a7b3e1a0455c1c6e51
+modified: 1651486313094
+created: 1651052824400
+url: "{{base}}/Users/test"
+name: Users/:id
+description: ""
+method: PUT
+body:
+  mimeType: application/json
+  text: |-
+    {
+    	"schemas": [
+    		"urn:ietf:params:scim:schemas:core:2.0:User"
+    	],
+    	"active": false,
+    	"id": "test",
+    	"userName": "test",
+    	"emails": [
+    		{
+    			"primary": true,
+    			"value": "another@example.net"
+    		}
+    	],
+    	"displayName": "test"
+    }
+parameters: []
+headers:
+  - name: OCS-APIRequest
+    value: "true"
+    id: pair_c30cf624f2224f5da06b969ac312e964
+    disabled: true
+  - name: Accept
+    value: application/json
+    id: pair_57ba1e6e793a48d68cd1947c8415875a
+    disabled: true
+  - name: Content-Type
+    value: application/json
+    id: pair_e4b906b43086410ba3322a5b3f84ca95
+authentication:
+  username: admin
+  password: admin
+  type: basic
+metaSortKey: -1651046796952.5
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

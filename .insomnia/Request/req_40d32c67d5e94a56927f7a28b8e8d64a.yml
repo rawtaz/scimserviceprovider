@@ -1,0 +1,30 @@
+_id: req_40d32c67d5e94a56927f7a28b8e8d64a
+type: Request
+parentId: fld_e4d2f5cd50dc4ff6a22f6cedfe501948
+modified: 1651049721145
+created: 1651046797040
+url: http://nextcloud.local/scim/v1.php/cloud/users
+name: OCS get users
+description: ""
+method: GET
+body: {}
+parameters: []
+headers:
+  - name: OCS-APIRequest
+    value: "true"
+    id: pair_c30cf624f2224f5da06b969ac312e964
+  - name: Accept
+    value: application/json
+    id: pair_57ba1e6e793a48d68cd1947c8415875a
+authentication:
+  username: admin
+  password: admin
+  type: basic
+metaSortKey: -1651046797040
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global
