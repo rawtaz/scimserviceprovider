@@ -1,0 +1,16 @@
+_id: env_48a1b234a7ec4fd6bc5344733a56fb0b
+type: Environment
+parentId: env_fa78dd46d8b7e55503f248fa0cb774b80decee85
+modified: 1651266119358
+created: 1651265162645
+name: local
+data:
+  base: http://nextcloud.local/index.php/apps/scimserviceprovider
+  password: admin
+dataPropertyOrder:
+  "&":
+    - base
+    - password
+color: null
+isPrivate: false
+metaSortKey: 1651046534454
