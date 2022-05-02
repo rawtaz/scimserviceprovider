@@ -45,7 +45,6 @@ namespace OCA\SCIMServiceProvider\Controller;
 use InvalidArgumentException;
 use OC\HintException;
 use OC\KnownUser\KnownUserService;
-use OCA\Settings\Mailer\NewUserMailHelper;
 use OCP\Accounts\IAccountManager;
 use OCP\AppFramework\OCS\OCSException;
 use OCP\AppFramework\OCSController;
@@ -60,7 +59,9 @@ use OCP\Security\ISecureRandom;
 use OCP\EventDispatcher\IEventDispatcher;
 use Psr\Log\LoggerInterface;
 use OCA\SCIMServiceProvider\Responses\SCIMListResponse;
-use OCA\SCIMServiceProvider\Responses\SCIMResourceResponse;
+use OCA\SCIMServiceProvider\Responses\SCIMJSONResponse;
+use OCA\SCIMServiceProvider\Responses\SCIMErrorResponse;
+
 
 class UserController extends ASCIMUser {
 
@@ -135,16 +136,16 @@ class UserController extends ASCIMUser {
 	 * gets user info
 	 *
 	 * @param string $id
-	 * @return SCIMResourceResponse
-	 * @throws SCIMException
+	 * @return SCIMJSONResponse
+	 * @throws Exception
 	 */
-	public function show(string $id): SCIMResourceResponse {
+	public function show(string $id): SCIMJSONResponse {
 		$user = $this->getSCIMUser($id);
 		// getUserData returns empty array if not enough permissions
 		if (empty($user)) {
-			throw new SCIMException('User not found', 404);
+			return new SCIMErrorResponse(['message' => 'User not found'], 404);
 		}
-		return new SCIMResourceResponse($user);
+		return new SCIMJSONResponse($user);
 	}
 
 	/**
@@ -154,16 +155,16 @@ class UserController extends ASCIMUser {
 	 * @param string $displayName
      * @param array  $emails
 	 * @param string $userName
-	 * @return SCIMResourceResponse
-	 * @throws SCIMException
+	 * @return SCIMJSONResponse
+	 * @throws Exception
 	 */
 	public function create( bool   $active = true,
 	                        string $displayName = '',
 							array  $emails = [],
-							string $userName = ''): SCIMResourceResponse {
+							string $userName = ''): SCIMJSONResponse {
 		if ($this->userManager->userExists($userName)) {
 			$this->logger->error('Failed createUser attempt: User already exists.', ['app' => 'SCIMServiceProvider']);
-			throw new SCIMException('User already exists', 409, 'uniqueness');
+			return new SCIMErrorResponse(['message' => 'User already exists'], 409);
 		}
 
 		try {
@@ -176,8 +177,8 @@ class UserController extends ASCIMUser {
 				}
 			}
 			$newUser->setEnabled($active);
-			return new SCIMResourceResponse($this->getSCIMUser($userName));
-		} catch (SCIMException $e) {
+			return new SCIMJSONResponse($this->getSCIMUser($userName));
+		} catch (Exception $e) {
 			$this->logger->warning('Failed createUser attempt with SCIMException exeption.', ['app' => 'SCIMServiceProvider']);
 			throw $e;
 		}
@@ -193,15 +194,15 @@ class UserController extends ASCIMUser {
 	 * @param string $displayName
      * @param array  $emails
 	 * @return DataResponse
-	 * @throws SCIMException
+	 * @throws Exception
 	 */
 	public function update( string $id,
 							bool   $active,
 							string $displayName = '',
-							array  $emails = []): SCIMResourceResponse {
+							array  $emails = []): SCIMJSONResponse {
 		$targetUser = $this->userManager->get($id);
 		if ($targetUser === null) {
-			throw new SCIMException('User not found', 404);
+			return new SCIMErrorResponse(['message' => 'User not found'], 404);
 		}
 		foreach ($emails as $email) {
 			if ($email['primary'] === true) {
@@ -211,7 +212,7 @@ class UserController extends ASCIMUser {
 		if (isset($active)) {
 			$targetUser->setEnabled($active);
 		}
-		return new SCIMResourceResponse($this->getSCIMUser($id));
+		return new SCIMJSONResponse($this->getSCIMUser($id));
 
 	}
 
@@ -220,13 +221,12 @@ class UserController extends ASCIMUser {
 	 *
 	 * @param string $id
 	 * @return DataResponse
-	 * @throws SCIMException
 	 */
 	public function destroy(string $id): Response {
 		$targetUser = $this->userManager->get($id);
 
 		if ($targetUser === null) {
-			throw new SCIMException('User not found', 404);
+			return new SCIMErrorResponse(['message' => 'User not found'], 404);
 		}
 
 		// Go ahead with the delete
@@ -235,7 +235,7 @@ class UserController extends ASCIMUser {
 			$response->setStatus(204);
 			return $response;
 		} else {
-			throw new SCIMException('');
+			return new SCIMErrorResponse(['message' => 'Couldn\'t delete user'], 503);
 		}
 	}
 

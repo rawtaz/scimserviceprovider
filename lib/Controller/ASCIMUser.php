@@ -43,7 +43,7 @@ use OCP\IRequest;
 use OCP\IUserManager;
 use OCP\IUserSession;
 use OCP\L10N\IFactory;
-use OCA\SCIMServiceProvider\Exceptions\SCIMException;
+use OCA\SCIMServiceProvider\Responses\SCIMErrorResponse;
 
 abstract class ASCIMUser extends ApiController {
 	/** @var IUserManager */
@@ -74,18 +74,18 @@ abstract class ASCIMUser extends ApiController {
 	}
 
 	/**
-	 * creates a array with all user data
+	 * creates an object with all user data
 	 *
 	 * @param string $userId
 	 * @param bool $includeScopes
 	 * @return array
-	 * @throws SCIMException
+	 * @throws Exception
 	 */
 	protected function getSCIMUser(string $userId): array {
 		// Check if the target user exists
 		$targetUserObject = $this->userManager->get($userId);
 		if ($targetUserObject === null) {
-			throw new SCIMException('User not found', 404);
+			return [];
 		}
 
 		$enabled = $this->config->getUserValue($targetUserObject->getUID(), 'core', 'enabled', 'true') === 'true';
@@ -93,23 +93,25 @@ abstract class ASCIMUser extends ApiController {
 		return [
             'schemas' => ["urn:ietf:params:scim:schemas:core:2.0:User"],
             'id' => $userId,
-            //'externalId' => $this->externalId,
+			'name' => [
+				'formatted' => $targetUserObject->getDisplayName()
+			],
             'meta' => [
 				'resourceType' => 'User',
 				'location' => '/Users/' . $userId,
-                //'created' => Helper::dateTime2string($this->created_at),
+				'created' => '2022-04-28T18:27:17.783Z', // todo
+				'lastModified' => '2022-04-28T18:27:17.783Z' // todo
             ],
             'userName' => $userId,
             'displayName' => $targetUserObject->getDisplayName(),
-            'emails' => [
+            'emails' => [ // todo if no emails
 				[
 				'primary' => true,
                 'value' => $targetUserObject->getSystemEMailAddress()
 				]
 			],
-            //'groups' => [],
+			'externalId' => '1234', // todo
             'active' => $enabled
         ];
 	}
-
 }

@@ -53,7 +53,7 @@ for integration tests
 
 # TODO
 
- - attribute active
+ - [x]attribute active
  - group mgmt
    - list user
    - add/remove user from groups
@@ -62,3 +62,11 @@ for integration tests
  - [x] json
  - [x] status code
  - [x] escaped location -  JSON_UNESCAPED_SLASHES
+
+
+ cd apps
+wget https://lab.libreho.st/libre.sh/scim/nextcloud-scim/-/archive/test-branch/nextcloud-scim-main.zip
+unzip nextcloud-scim-main.zip
+rm nextcloud-scim-main.zip
+rm -rf scimserviceprovider
+mv nextcloud-scim-test-branchxxx scimserviceprovider

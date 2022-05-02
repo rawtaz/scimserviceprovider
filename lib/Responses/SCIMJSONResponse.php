@@ -4,13 +4,11 @@ namespace OCA\SCIMServiceProvider\Responses;
 
 use OCP\AppFramework\Http\Response;
 
-use OCA\SCIMServiceProvider\Exceptions\SCIMException;
-
 /**
- * Class SCIMListResponse
+ * Class SCIMResourceResponse
  * 
  */
-class SCIMListResponse extends Response {
+class SCIMJSONResponse extends Response {
 	/**
 	 * response data
 	 * @var array|object
@@ -19,7 +17,7 @@ class SCIMListResponse extends Response {
 
 
 	/**
-	 * constructor of SCIMListResponse
+	 * constructor of SCIMResourceResponse
 	 * @param array|object $data the object or array that should be transformed
 	 * @param int $statusCode the Http status code, defaults to 200
 	 * @since 6.0.0
@@ -39,17 +37,11 @@ class SCIMListResponse extends Response {
 	 * @throws \Exception If data could not get encoded
 	 */
 	public function render() {
-        $scimReponse = [
-            'schemas' => ['urn:ietf:params:scim:api:messages:2.0:ListResponse'],
-            'startIndex' => 1, // todo pagination
-            'Resources' => $this->data,
-            'totalResults' => sizeof($this->data)
-        ];
-		$response = json_encode($scimReponse, JSON_UNESCAPED_SLASHES);
+		$response = json_encode($this->data, JSON_UNESCAPED_SLASHES);
 
 		if ($response === false) {
-			throw new SCIMException(sprintf('Could not json_encode due to invalid ' .
-				'non UTF-8 characters in the array: %s', var_export($scimReponse, true)));
+			throw new Exception(sprintf('Could not json_encode due to invalid ' .
+				'non UTF-8 characters in the array: %s', var_export($this->data, true)));
 		}
 
 		return $response;
