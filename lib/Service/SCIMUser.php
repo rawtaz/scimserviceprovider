@@ -2,43 +2,21 @@
 
 declare(strict_types=1);
 
-namespace OCA\SCIMServiceProvider\Controller;
+namespace OCA\SCIMServiceProvider\Service;
 
-use OC\Group\Manager;
-use OCP\Accounts\IAccountManager;
-use OCP\AppFramework\ApiController;
 use OCP\IConfig;
-use OCP\IGroupManager;
-use OCP\IRequest;
 use OCP\IUserManager;
-use OCP\IUserSession;
 
-abstract class ASCIMUser extends ApiController {
+class SCIMUser {
 	/** @var IUserManager */
 	protected $userManager;
 	/** @var IConfig */
 	protected $config;
-	/** @var IGroupManager|Manager */ // FIXME Requires a method that is not on the interface
-	protected $groupManager;
-	/** @var IUserSession */
-	protected $userSession;
-	/** @var IAccountManager */
-	protected $accountManager;
 
-	public function __construct(string $appName,
-								IRequest $request,
-								IUserManager $userManager,
-								IConfig $config,
-								IGroupManager $groupManager,
-								IUserSession $userSession,
-								IAccountManager $accountManager) {
-		parent::__construct($appName, $request);
-
+	public function __construct(IUserManager $userManager,
+								IConfig $config) {
 		$this->userManager = $userManager;
 		$this->config = $config;
-		$this->groupManager = $groupManager;
-		$this->userSession = $userSession;
-		$this->accountManager = $accountManager;
 	}
 
 	/**
@@ -49,7 +27,7 @@ abstract class ASCIMUser extends ApiController {
 	 * @return array
 	 * @throws Exception
 	 */
-	protected function getSCIMUser(string $userId): array {
+	public function get(string $userId): array {
 		// Check if the target user exists
 		$targetUserObject = $this->userManager->get($userId);
 		if ($targetUserObject === null) {

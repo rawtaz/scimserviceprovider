@@ -4,46 +4,42 @@ declare(strict_types=1);
 
 namespace OCA\SCIMServiceProvider\Controller;
 
-use OCP\Accounts\IAccountManager;
+use OCP\AppFramework\ApiController;
 use OCP\AppFramework\Http\Response;
-use OCP\IConfig;
-use OCP\IGroupManager;
 use OCP\IRequest;
 use OCP\IUserManager;
-use OCP\IUserSession;
 use OCP\Security\ISecureRandom;
 use Psr\Log\LoggerInterface;
 use OCA\SCIMServiceProvider\Responses\SCIMListResponse;
 use OCA\SCIMServiceProvider\Responses\SCIMJSONResponse;
 use OCA\SCIMServiceProvider\Responses\SCIMErrorResponse;
 
-class UserController extends ASCIMUser {
+use OCA\SCIMServiceProvider\Service\SCIMUser;
+
+
+class UserController extends ApiController {
 
 	/** @var LoggerInterface */
 	private $logger;
 	/** @var ISecureRandom */
 	private $secureRandom;
+	private $SCIMUser;
 
 
 	public function __construct(string $appName,
 								IRequest $request,
 								IUserManager $userManager,
-								IConfig $config,
-								IGroupManager $groupManager,
-								IUserSession $userSession,
-								IAccountManager $accountManager,
 								LoggerInterface $logger,
-								ISecureRandom $secureRandom) {
+								ISecureRandom $secureRandom,
+								SCIMUser $SCIMUser) {
 		parent::__construct($appName,
 							$request,
-							$userManager,
-							$config,
-							$groupManager,
-							$userSession,
-							$accountManager);
+							$userManager);
 
 		$this->logger = $logger;
 		$this->secureRandom = $secureRandom;
+		$this->SCIMUser = $SCIMUser;
+		$this->userManager = $userManager;
 	}
 
 	/**
@@ -59,7 +55,7 @@ class UserController extends ASCIMUser {
 		$SCIMUsers = array();
 		foreach ($userIds as $userId) {
 			$userId = (string) $userId;
-			$SCIMUser = $this->getSCIMUser($userId);
+			$SCIMUser = $this->SCIMUser->get($userId);
 			// Do not insert empty entry
 			if (!empty($SCIMUser)) {
 				$SCIMUsers[] = $SCIMUser;
@@ -79,7 +75,7 @@ class UserController extends ASCIMUser {
 	 * @throws Exception
 	 */
 	public function show(string $id): SCIMJSONResponse {
-		$user = $this->getSCIMUser($id);
+		$user = $this->SCIMUser->get($id);
 		// getUserData returns empty array if not enough permissions
 		if (empty($user)) {
 			return new SCIMErrorResponse(['message' => 'User not found'], 404);
@@ -116,7 +112,7 @@ class UserController extends ASCIMUser {
 				}
 			}
 			$newUser->setEnabled($active);
-			return new SCIMJSONResponse($this->getSCIMUser($userName));
+			return new SCIMJSONResponse($this->SCIMUser->get($userName));
 		} catch (Exception $e) {
 			$this->logger->warning('Failed createUser attempt with SCIMException exeption.', ['app' => 'SCIMServiceProvider']);
 			throw $e;
@@ -151,7 +147,7 @@ class UserController extends ASCIMUser {
 		if (isset($active)) {
 			$targetUser->setEnabled($active);
 		}
-		return new SCIMJSONResponse($this->getSCIMUser($id));
+		return new SCIMJSONResponse($this->SCIMUser->get($id));
 	}
 
 	/**

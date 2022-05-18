@@ -2,43 +2,17 @@
 
 declare(strict_types=1);
 
-namespace OCA\SCIMServiceProvider\Controller;
+namespace OCA\SCIMServiceProvider\Service;
 
 use OC\Group\Manager;
-use OCP\Accounts\IAccountManager;
-use OCP\AppFramework\ApiController;
-use OCP\IConfig;
 use OCP\IGroupManager;
-use OCP\IRequest;
-use OCP\IUserManager;
-use OCP\IUserSession;
 
-abstract class ASCIMGroup extends ApiController {
-	/** @var IUserManager */
-	protected $userManager;
-	/** @var IConfig */
-	protected $config;
+class SCIMGroup {
 	/** @var IGroupManager|Manager */ // FIXME Requires a method that is not on the interface
 	protected $groupManager;
-	/** @var IUserSession */
-	protected $userSession;
-	/** @var IAccountManager */
-	protected $accountManager;
 
-	public function __construct(string $appName,
-								IRequest $request,
-								IUserManager $userManager,
-								IConfig $config,
-								IGroupManager $groupManager,
-								IUserSession $userSession,
-								IAccountManager $accountManager) {
-		parent::__construct($appName, $request);
-
-		$this->userManager = $userManager;
-		$this->config = $config;
+	public function __construct(IGroupManager $groupManager) {
 		$this->groupManager = $groupManager;
-		$this->userSession = $userSession;
-		$this->accountManager = $accountManager;
 	}
 
 	/**
@@ -49,7 +23,7 @@ abstract class ASCIMGroup extends ApiController {
 	 * @return array
 	 * @throws Exception
 	 */
-	protected function getSCIMGroup(string $groupId): array {
+	public function get(string $groupId): array {
 		$groupId = urldecode($groupId);
 
 		// Check the group exists

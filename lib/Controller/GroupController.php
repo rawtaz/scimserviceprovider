@@ -4,40 +4,39 @@ declare(strict_types=1);
 
 namespace OCA\SCIMServiceProvider\Controller;
 
-use OCP\Accounts\IAccountManager;
+use OCP\AppFramework\ApiController;
 use OCP\AppFramework\Http\Response;
-use OCP\IConfig;
 use OCP\IGroupManager;
 use OCP\IRequest;
 use OCP\IUserManager;
-use OCP\IUserSession;
 use Psr\Log\LoggerInterface;
 use OCA\SCIMServiceProvider\Responses\SCIMListResponse;
 use OCA\SCIMServiceProvider\Responses\SCIMJSONResponse;
 use OCA\SCIMServiceProvider\Responses\SCIMErrorResponse;
 
-class GroupController extends ASCIMGroup {
+use OCA\SCIMServiceProvider\Service\SCIMGroup;
+
+class GroupController extends ApiController {
 
 	/** @var LoggerInterface */
 	private $logger;
+	private $SCIMGroup;
 
 	public function __construct(string $appName,
 								IRequest $request,
 								IUserManager $userManager,
-								IConfig $config,
 								IGroupManager $groupManager,
-								IUserSession $userSession,
-								IAccountManager $accountManager,
-								LoggerInterface $logger) {
+								LoggerInterface $logger,
+								SCIMGroup $SCIMGroup) {
 		parent::__construct($appName,
 							$request,
 							$userManager,
-							$config,
-							$groupManager,
-							$userSession,
-							$accountManager);
+							$groupManager);
 
 		$this->logger = $logger;
+		$this->SCIMGroup = $SCIMGroup;
+		$this->groupManager = $groupManager;
+		$this->userManager = $userManager;
 	}
 
 	/**
@@ -48,7 +47,7 @@ class GroupController extends ASCIMGroup {
 	public function index(): SCIMListResponse {
 		$SCIMGroups = $this->groupManager->search('', null, 0);
 		$SCIMGroups = array_map(function ($group) {
-			return $this->getSCIMGroup($group->getGID());
+			return $this->SCIMGroup->get($group->getGID());
 		}, $SCIMGroups);
 		return new SCIMListResponse($SCIMGroups);
 	}
@@ -63,8 +62,7 @@ class GroupController extends ASCIMGroup {
 	 * @throws Exception
 	 */
 	public function show(string $id): SCIMJSONResponse {
-		$group = $this->getSCIMGroup($id);
-		// getUserData returns empty array if not enough permissions
+		$group = $this->SCIMGroup->get($id);
 		if (empty($group)) {
 			return new SCIMErrorResponse(['message' => 'Group not found'], 404);
 		}
@@ -101,7 +99,7 @@ class GroupController extends ASCIMGroup {
 			$targetUser = $this->userManager->get($member['value']);
 			$group->addUser($targetUser);
 		}
-		return new SCIMJSONResponse($this->getSCIMGroup($id));
+		return new SCIMJSONResponse($this->SCIMGroup->get($id));
 	}
 
 
@@ -127,7 +125,7 @@ class GroupController extends ASCIMGroup {
 			$group->addUser($targetUser);
 			// todo implement member removal (:
 		}
-		return new SCIMJSONResponse($this->getSCIMGroup($id));
+		return new SCIMJSONResponse($this->SCIMGroup->get($id));
 	}
 
 	/**
