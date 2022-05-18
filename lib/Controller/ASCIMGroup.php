@@ -13,7 +13,7 @@ use OCP\IRequest;
 use OCP\IUserManager;
 use OCP\IUserSession;
 
-abstract class ASCIMUser extends ApiController {
+abstract class ASCIMGroup extends ApiController {
 	/** @var IUserManager */
 	protected $userManager;
 	/** @var IConfig */
@@ -42,44 +42,43 @@ abstract class ASCIMUser extends ApiController {
 	}
 
 	/**
-	 * creates an object with all user data
+	 * creates an object with all group data
 	 *
-	 * @param string $userId
+	 * @param string $groupId
 	 * @param bool $includeScopes
 	 * @return array
 	 * @throws Exception
 	 */
-	protected function getSCIMUser(string $userId): array {
-		// Check if the target user exists
-		$targetUserObject = $this->userManager->get($userId);
-		if ($targetUserObject === null) {
+	protected function getSCIMGroup(string $groupId): array {
+		$groupId = urldecode($groupId);
+
+		// Check the group exists
+		$group = $this->groupManager->get($groupId);
+		if ($group === null) {
 			return [];
 		}
 
-		$enabled = $this->config->getUserValue($targetUserObject->getUID(), 'core', 'enabled', 'true') === 'true';
+		$members = array();
+		foreach ($this->groupManager->get($groupId)->getUsers() as $member) {
+			$members[] = [
+				'value' => $member->getUID(),
+				'$ref' => '/Users/' . $member->getUID(),
+				'display' => $member->getDisplayName()
+			];
+		}
 
 		return [
-			'schemas' => ["urn:ietf:params:scim:schemas:core:2.0:User"],
-			'id' => $userId,
-			'name' => [
-				'formatted' => $targetUserObject->getDisplayName()
-			],
+			'schemas' => ['urn:ietf:params:scim:schemas:core:2.0:Group'],
+			'id' => $groupId,
+			'displayName' => $group->getDisplayName(),
+			'externalId' => '1234', // todo
 			'meta' => [
-				'resourceType' => 'User',
-				'location' => '/Users/' . $userId,
+				'resourceType' => 'Group',
+				'location' => '/Groups/' . $groupId,
 				'created' => '2022-04-28T18:27:17.783Z', // todo
 				'lastModified' => '2022-04-28T18:27:17.783Z' // todo
 			],
-			'userName' => $userId,
-			'displayName' => $targetUserObject->getDisplayName(),
-			'emails' => [ // todo if no emails
-				[
-					'primary' => true,
-					'value' => $targetUserObject->getSystemEMailAddress()
-				]
-			],
-			'externalId' => '1234', // todo
-			'active' => $enabled
+			'members' => $members
 		];
 	}
 }

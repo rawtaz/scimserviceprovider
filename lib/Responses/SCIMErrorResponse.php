@@ -3,13 +3,10 @@
 namespace OCA\SCIMServiceProvider\Responses;
 
 use OCP\AppFramework\Http\Response;
-use OCA\SCIMServiceProvider\Responses\SCIMJSONResponse;
-
-
 
 /**
  * Class SCIMErrorResponse
- * 
+ *
  */
 class SCIMErrorResponse extends SCIMJSONResponse {
 	/**
@@ -26,11 +23,11 @@ class SCIMErrorResponse extends SCIMJSONResponse {
 	 */
 	public function render() {
 		$message = [
-            'schemas' => ['urn:ietf:params:scim:api:messages:2.0:Error'],
-            'detail' => $this->data['message'],
-            'scimType' => '',
-            'status' => $this->getStatus()
-        ];
+			'schemas' => ['urn:ietf:params:scim:api:messages:2.0:Error'],
+			'detail' => $this->data['message'],
+			'scimType' => '',
+			'status' => $this->getStatus()
+		];
 		$response = json_encode($message, JSON_UNESCAPED_SLASHES);
 
 		if ($response === false) {

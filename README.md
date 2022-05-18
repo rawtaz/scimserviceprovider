@@ -1,72 +1,47 @@
-# S C I M Server
-Place this app in **nextcloud/apps/**
+# SCIM Service Provider
 
-## Building the app
+This app allows to provision users and groups in Nextcloud from a scim client.
 
-The app can be built by using the provided Makefile by running:
+You can see the [video](https://hot-objects.liiib.re/meet-liiib-re-recordings/pair_2022-05-02-15-40-37.mp4) that shows how it works.
 
-    make
+## How to use
 
-This requires the following things to be present:
-* make
-* which
-* tar: for building the archive
-* curl: used if phpunit and composer are not installed to fetch them from the web
-* npm: for building and testing everything JS, only required if a package.json is placed inside the **js/** folder
+We plan to publish on the Nextcloud app store, but in the mean time, you can use instructions at the bottom.
 
-The make command will install or update Composer dependencies if a composer.json is present and also **npm run build** if a package.json is present in the **js/** folder. The npm **build** script should use local paths for build systems and package managers, so people that simply want to build the app won't need to install npm libraries globally, e.g.:
+## Use with Keycloak
 
-**package.json**:
-```json
-"scripts": {
-    "test": "node node_modules/gulp-cli/bin/gulp.js karma",
-    "prebuild": "npm install && node_modules/bower/bin/bower install && node_modules/bower/bin/bower update",
-    "build": "node node_modules/gulp-cli/bin/gulp.js"
-}
-```
-
-
-## Publish to App Store
-
-First get an account for the [App Store](http://apps.nextcloud.com/) then run:
-
-    make && make appstore
-
-The archive is located in build/artifacts/appstore and can then be uploaded to the App Store.
+You can use with the [SCIM plugin we developped for keycloak](https://lab.libreho.st/libre.sh/scim/keycloak-scim).
 
 ## Running tests
-You can use the provided Makefile to run all tests by using:
 
-    make test
+To run the test, you can use [insomnia UI](https://docs.insomnia.rest).
 
-This will run the PHP unit and integration tests and if a package.json is present in the **js/** folder will execute **npm run test**
+![screenshot insomnia ui](./screenshots/insomnia.png)
 
-Of course you can also install [PHPUnit](http://phpunit.de/getting-started.html) and use the configurations directly:
+For CI, there is still [a bug](https://github.com/Kong/insomnia/issues/4747) we need to find a fix.
 
-    phpunit -c phpunit.xml
+## Todo
 
-or:
+ - ExternalID
+ - json exceptions
+ - Meta ->
+    - createdAt
+    - lastModified
+ - if no emails in user, return nice array
+ - pagination
+ - group member removal
 
-    phpunit -c phpunit.integration.xml
+## Quick "Deploy" to test
 
-for integration tests
-
-# TODO
-
- - [x]attribute active
- - group mgmt
-   - list user
-   - add/remove user from groups
-   - update, displayName
- - Erreur/Exception
- - [x] json
- - [x] status code
- - [x] escaped location -  JSON_UNESCAPED_SLASHES
-
-
- cd apps
-wget https://lab.libreho.st/libre.sh/scim/nextcloud-scim/-/archive/test-branch/nextcloud-scim-main.zip
+```
+cd apps
+wget https://lab.libreho.st/libre.sh/scim/nextcloud-scim/-/archive/main/nextcloud-scim-main.zip
 unzip nextcloud-scim-main.zip
 rm nextcloud-scim-main.zip
 rm -rf scimserviceprovider
-mv nextcloud-scim-test-branchxxx scimserviceprovider
+mv nextcloud-scim-main scimserviceprovider
+```
+
+## NextGov Hackathon
+
+This app was started during the [Nextgov hackathon](https://eventornado.com/submission/automatic-sso-saml-sync-from-identity-provider-keycloak-through-a-well-known-protocol-scim?s=1#idea)!
