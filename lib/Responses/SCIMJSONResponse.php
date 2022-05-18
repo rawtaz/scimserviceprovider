@@ -6,7 +6,7 @@ use OCP\AppFramework\Http\Response;
 
 /**
  * Class SCIMResourceResponse
- * 
+ *
  */
 class SCIMJSONResponse extends Response {
 	/**

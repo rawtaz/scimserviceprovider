@@ -2,52 +2,9 @@
 
 declare(strict_types=1);
 
-/**
- * @copyright Copyright (c) 2016, ownCloud, Inc.
- *
- * @author Arthur Schiwon <blizzz@arthur-schiwon.de>
- * @author Bjoern Schiessle <bjoern@schiessle.org>
- * @author Christoph Wurst <christoph@winzerhof-wurst.at>
- * @author Daniel Calviño Sánchez <danxuliu@gmail.com>
- * @author Daniel Kesselberg <mail@danielkesselberg.de>
- * @author Joas Schilling <coding@schilljs.com>
- * @author John Molakvoæ <skjnldsv@protonmail.com>
- * @author Julius Härtl <jus@bitgrid.net>
- * @author Lukas Reschke <lukas@statuscode.ch>
- * @author michag86 <micha_g@arcor.de>
- * @author Mikael Hammarin <mikael@try2.se>
- * @author Morris Jobke <hey@morrisjobke.de>
- * @author Robin Appelman <robin@icewind.nl>
- * @author Roeland Jago Douma <roeland@famdouma.nl>
- * @author Sujith Haridasan <sujith.h@gmail.com>
- * @author Thomas Citharel <nextcloud@tcit.fr>
- * @author Thomas Müller <thomas.mueller@tmit.eu>
- * @author Tom Needham <tom@owncloud.com>
- * @author Vincent Petry <vincent@nextcloud.com>
- *
- * @license AGPL-3.0
- *
- * This code is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License, version 3,
- * as published by the Free Software Foundation.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License, version 3,
- * along with this program. If not, see <http://www.gnu.org/licenses/>
- *
- */
 namespace OCA\SCIMServiceProvider\Controller;
 
-use InvalidArgumentException;
-use OC\HintException;
-use OC\KnownUser\KnownUserService;
 use OCP\Accounts\IAccountManager;
-use OCP\AppFramework\OCS\OCSException;
-use OCP\AppFramework\OCSController;
 use OCP\AppFramework\Http\Response;
 use OCP\IConfig;
 use OCP\IGroupManager;
@@ -62,7 +19,6 @@ use OCA\SCIMServiceProvider\Responses\SCIMListResponse;
 use OCA\SCIMServiceProvider\Responses\SCIMJSONResponse;
 use OCA\SCIMServiceProvider\Responses\SCIMErrorResponse;
 
-
 class GroupController extends ASCIMGroup {
 
 	/** @var IURLGenerator */
@@ -71,8 +27,6 @@ class GroupController extends ASCIMGroup {
 	private $logger;
 	/** @var ISecureRandom */
 	private $secureRandom;
-	/** @var KnownUserService */
-	private $knownUserService;
 	/** @var IEventDispatcher */
 	private $eventDispatcher;
 
@@ -86,7 +40,6 @@ class GroupController extends ASCIMGroup {
 								IURLGenerator $urlGenerator,
 								LoggerInterface $logger,
 								ISecureRandom $secureRandom,
-								KnownUserService $knownUserService,
 								IEventDispatcher $eventDispatcher) {
 		parent::__construct($appName,
 							$request,
@@ -99,7 +52,6 @@ class GroupController extends ASCIMGroup {
 		$this->urlGenerator = $urlGenerator;
 		$this->logger = $logger;
 		$this->secureRandom = $secureRandom;
-		$this->knownUserService = $knownUserService;
 		$this->eventDispatcher = $eventDispatcher;
 	}
 
@@ -138,13 +90,12 @@ class GroupController extends ASCIMGroup {
 	 * @NoCSRFRequired
 	 *
 	 * @param string $displayName
-     * @param array  $members
+	 * @param array  $members
 	 * @return SCIMJSONResponse
 	 * @throws Exception
 	 */
-	public function create( string $displayName = '',
+	public function create(string $displayName = '',
 							array  $members = []): SCIMJSONResponse {
-		
 		$id = urlencode($displayName);
 		// Validate name
 		if (empty($id)) {
@@ -173,13 +124,13 @@ class GroupController extends ASCIMGroup {
 	 * @NoCSRFRequired
 	 *
 	 * @param string $id
-	 * 
+	 *
 	 * @param string $displayName
-     * @param array  $members
+	 * @param array  $members
 	 * @return DataResponse
 	 * @throws Exception
 	 */
-	public function update( string $id,
+	public function update(string $id,
 							string $displayName = '',
 							array  $members = []): SCIMJSONResponse {
 		$group = $this->groupManager->get($id);
@@ -214,5 +165,4 @@ class GroupController extends ASCIMGroup {
 		$response->setStatus(204);
 		return $response;
 	}
-
 }

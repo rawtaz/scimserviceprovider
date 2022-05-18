@@ -8,7 +8,7 @@ use OCA\SCIMServiceProvider\Exceptions\SCIMException;
 
 /**
  * Class SCIMListResponse
- * 
+ *
  */
 class SCIMListResponse extends Response {
 	/**
@@ -39,12 +39,12 @@ class SCIMListResponse extends Response {
 	 * @throws \Exception If data could not get encoded
 	 */
 	public function render() {
-        $scimReponse = [
-            'schemas' => ['urn:ietf:params:scim:api:messages:2.0:ListResponse'],
-            'startIndex' => 1, // todo pagination
-            'Resources' => $this->data,
-            'totalResults' => sizeof($this->data)
-        ];
+		$scimReponse = [
+			'schemas' => ['urn:ietf:params:scim:api:messages:2.0:ListResponse'],
+			'startIndex' => 1, // todo pagination
+			'Resources' => $this->data,
+			'totalResults' => sizeof($this->data)
+		];
 		$response = json_encode($scimReponse, JSON_UNESCAPED_SLASHES);
 
 		if ($response === false) {
