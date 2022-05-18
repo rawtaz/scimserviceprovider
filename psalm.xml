@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<psalm
+    errorLevel="4"
+    resolveFromConfigFile="true"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="https://getpsalm.org/schema/config"
+    xsi:schemaLocation="https://getpsalm.org/schema/config"
+>
+    <projectFiles>
+        <directory name="lib" />
+        <ignoreFiles>
+            <directory name="vendor" />
+        </ignoreFiles>
+    </projectFiles>
+    <extraFiles>
+        <directory name="vendor" />
+    </extraFiles>
+	<issueHandlers>
+		<UndefinedClass>
+			<errorLevel type="suppress">
+				<referencedClass name="OC" />
+                <referencedClass name="OC\Group\Manager" />
+				<referencedClass name="OC\Security\CSP\ContentSecurityPolicyNonceManager" />
+				<referencedClass name="Psr\Http\Client\ClientExceptionInterface" />
+			</errorLevel>
+		</UndefinedClass>
+		<UndefinedDocblockClass>
+			<errorLevel type="suppress">
+				<referencedClass name="Doctrine\DBAL\Driver\Statement" />
+				<referencedClass name="Doctrine\DBAL\Schema\Schema" />
+				<referencedClass name="Doctrine\DBAL\Schema\SchemaException" />
+				<referencedClass name="Doctrine\DBAL\Schema\Table" />
+				<referencedClass name="OC\Security\CSP\ContentSecurityPolicyNonceManager" />
+                <referencedClass name="OC\Group\Manager" />
+			</errorLevel>
+		</UndefinedDocblockClass>
+        <UndefinedInterfaceMethod>
+            <errorLevel type="suppress">
+				<referencedMethod name="OCP\IUser::getSystemEMailAddress" />
+            </errorLevel>
+        </UndefinedInterfaceMethod>
+	</issueHandlers>
+</psalm>
