@@ -1,10 +1,51 @@
 _id: ut_bdcc8b3fadc246f0ad4d2ef37617d472
 type: UnitTest
 parentId: uts_429299a4eccb41d587546701419d1687
-modified: 1651483468325
+modified: 1652889638388
 created: 1651142984584
 requestId: req_a4fa84d8861d4122916524d3c67eb3d0
-name: Post /Users
-code: |-
-  const response1 = await insomnia.send();
-  expect(response1.status).to.equal(200);
+name: Full scenario Post/Get/Put/Get/Del
+code: >-
+  // Post /Users
+
+  var response = await insomnia.send();
+
+  expect(response.status).to.equal(200);
+
+
+  // Get /User/test
+
+  response = await insomnia.send('req_a94c79a2fd0a49b3b3c3d71966d96d5a');
+
+  var body = JSON.parse(response.data);
+
+  expect(response.status).to.equal(200);
+
+  expect(body.userName).to.equal('test');
+
+  expect(body.emails.find(x => x.primary === true).value).to.equal('test@example.net');
+
+
+  // Put /User/test
+
+  response = await insomnia.send('req_ef7e9d77fc90488e8d005455c5f7ff28');
+
+  expect(response.status).to.equal(200);
+
+
+  // Get /User/test
+
+  response = await insomnia.send('req_a94c79a2fd0a49b3b3c3d71966d96d5a');
+
+  body = JSON.parse(response.data);
+
+  expect(response.status).to.equal(200);
+
+  expect(body.emails.find(x => x.primary === true).value).to.equal('another@example.net');
+
+
+  // Del /User/test
+
+  const response1 = await insomnia.send('req_e74f3da259354e84aa99967258d99bbb');
+
+  expect(response1.status).to.equal(204);
