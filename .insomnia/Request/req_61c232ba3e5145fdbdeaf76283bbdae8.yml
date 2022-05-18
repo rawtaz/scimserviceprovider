@@ -1,7 +1,7 @@
 _id: req_61c232ba3e5145fdbdeaf76283bbdae8
 type: Request
 parentId: fld_0f6f8e8898c848a7b3e1a0455c1c6e51
-modified: 1651486292730
+modified: 1651496182148
 created: 1651049731533
 url: "{{base}}/Users"
 name: Users
@@ -14,7 +14,7 @@ headers:
     name: Authorization
     value: "{{password}}"
     description: ""
-    disabled: false
+    disabled: true
 authentication:
   username: admin
   password: "{{password}}"
