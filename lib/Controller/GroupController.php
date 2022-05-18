@@ -9,11 +9,8 @@ use OCP\AppFramework\Http\Response;
 use OCP\IConfig;
 use OCP\IGroupManager;
 use OCP\IRequest;
-use OCP\IURLGenerator;
 use OCP\IUserManager;
 use OCP\IUserSession;
-use OCP\Security\ISecureRandom;
-use OCP\EventDispatcher\IEventDispatcher;
 use Psr\Log\LoggerInterface;
 use OCA\SCIMServiceProvider\Responses\SCIMListResponse;
 use OCA\SCIMServiceProvider\Responses\SCIMJSONResponse;
@@ -21,14 +18,8 @@ use OCA\SCIMServiceProvider\Responses\SCIMErrorResponse;
 
 class GroupController extends ASCIMGroup {
 
-	/** @var IURLGenerator */
-	protected $urlGenerator;
 	/** @var LoggerInterface */
 	private $logger;
-	/** @var ISecureRandom */
-	private $secureRandom;
-	/** @var IEventDispatcher */
-	private $eventDispatcher;
 
 	public function __construct(string $appName,
 								IRequest $request,
@@ -37,10 +28,7 @@ class GroupController extends ASCIMGroup {
 								IGroupManager $groupManager,
 								IUserSession $userSession,
 								IAccountManager $accountManager,
-								IURLGenerator $urlGenerator,
-								LoggerInterface $logger,
-								ISecureRandom $secureRandom,
-								IEventDispatcher $eventDispatcher) {
+								LoggerInterface $logger) {
 		parent::__construct($appName,
 							$request,
 							$userManager,
@@ -49,10 +37,7 @@ class GroupController extends ASCIMGroup {
 							$userSession,
 							$accountManager);
 
-		$this->urlGenerator = $urlGenerator;
 		$this->logger = $logger;
-		$this->secureRandom = $secureRandom;
-		$this->eventDispatcher = $eventDispatcher;
 	}
 
 	/**
