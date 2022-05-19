@@ -59,7 +59,7 @@ class SCIMUser {
 			$SCIMUser['externalId'] = $externalId;
 		}
 		if ($email !== null) {
-			$SCIMUser['email'] = [ // todo if no emails
+			$SCIMUser['emails'] = [ // todo if no emails
 				[
 					'primary' => true,
 					'value' => $email
