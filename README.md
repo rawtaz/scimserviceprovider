@@ -22,14 +22,22 @@ For CI, there is still [a bug](https://github.com/Kong/insomnia/issues/4747) we 
 
 ## Todo
 
- - ExternalID
- - json exceptions
- - Meta ->
+ - [ ] Meta -> ([can't implement yet](https://github.com/nextcloud/server/issues/22640))
     - createdAt
     - lastModified
- - if no emails in user, return nice array
- - pagination
- - group member removal
+ - [ ] ExternalID
+    - [ ] Users
+    - [ ] Groups - [waiting for feedback](https://help.nextcloud.com/t/add-metadata-to-groups/139271)
+ - [ ] if no emails in user, return nice array
+ - [ ] json exceptions
+ - [ ] group member removal
+ - [ ] pagination
+ - [ ] CI/CD
+   - [ ] Lint cs:check
+   - [ ] test psalm
+   - [ ] test insomnia
+   - [ ] publish app on app store
+
 
 ## Quick "Deploy" to test
 

@@ -45,8 +45,8 @@ class SCIMUser {
 			'meta' => [
 				'resourceType' => 'User',
 				'location' => '/Users/' . $userId,
-				'created' => '2022-04-28T18:27:17.783Z', // todo
-				'lastModified' => '2022-04-28T18:27:17.783Z' // todo
+				'created' => '1970-01-01T00:00:00.000Z',
+				'lastModified' => '1970-01-01T00:00:00.000Z'
 			],
 			'userName' => $userId,
 			'displayName' => $targetUserObject->getDisplayName(),
