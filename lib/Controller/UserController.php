@@ -89,6 +89,7 @@ class UserController extends ApiController {
 	 * @param bool   $active
 	 * @param string $displayName
 	 * @param array  $emails
+	 * @param string $externalId
 	 * @param string $userName
 	 * @return SCIMJSONResponse
 	 * @throws Exception
@@ -96,6 +97,7 @@ class UserController extends ApiController {
 	public function create(bool   $active = true,
 							string $displayName = '',
 							array  $emails = [],
+							string $externalId = '',
 							string $userName = ''): SCIMJSONResponse {
 		if ($this->userManager->userExists($userName)) {
 			$this->logger->error('Failed createUser attempt: User already exists.', ['app' => 'SCIMServiceProvider']);
@@ -112,6 +114,7 @@ class UserController extends ApiController {
 				}
 			}
 			$newUser->setEnabled($active);
+			$this->SCIMUser->setExternalId($userName, $externalId);
 			return new SCIMJSONResponse($this->SCIMUser->get($userName));
 		} catch (Exception $e) {
 			$this->logger->warning('Failed createUser attempt with SCIMException exeption.', ['app' => 'SCIMServiceProvider']);

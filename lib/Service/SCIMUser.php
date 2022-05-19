@@ -35,8 +35,11 @@ class SCIMUser {
 		}
 
 		$enabled = $this->config->getUserValue($targetUserObject->getUID(), 'core', 'enabled', 'true') === 'true';
+		$externalId = $this->config->getUserValue($targetUserObject->getUID(), 'SCIMServiceProvider', 'ExternalId', '');
+		$email = $targetUserObject->getSystemEMailAddress();
 
-		return [
+
+		$SCIMUser = [
 			'schemas' => ["urn:ietf:params:scim:schemas:core:2.0:User"],
 			'id' => $userId,
 			'name' => [
@@ -50,14 +53,32 @@ class SCIMUser {
 			],
 			'userName' => $userId,
 			'displayName' => $targetUserObject->getDisplayName(),
-			'emails' => [ // todo if no emails
-				[
-					'primary' => true,
-					'value' => $targetUserObject->getSystemEMailAddress()
-				]
-			],
-			'externalId' => '1234', // todo
 			'active' => $enabled
 		];
+		if ($externalId !== '') {
+			$SCIMUser['externalId'] = $externalId;
+		}
+		if ($email !== null) {
+			$SCIMUser['email'] = [ // todo if no emails
+				[
+					'primary' => true,
+					'value' => $email
+				]
+			];
+		}
+
+		return $SCIMUser;
 	}
+
+	/**
+	 * Sets externalId on user
+	 *
+	 * @param string $userId
+	 * @param string $externalId
+	 * @throws Exception
+	 */
+	public function setExternalId(string $userId, string $externalId) {
+		$this->config->setUserValue($userId, 'SCIMServiceProvider', 'ExternalId', $externalId);
+	}
+
 }

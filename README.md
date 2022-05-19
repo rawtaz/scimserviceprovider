@@ -26,9 +26,7 @@ For CI, there is still [a bug](https://github.com/Kong/insomnia/issues/4747) we 
     - createdAt
     - lastModified
  - [ ] ExternalID
-    - [ ] Users
     - [ ] Groups - [waiting for feedback](https://help.nextcloud.com/t/add-metadata-to-groups/139271)
- - [ ] if no emails in user, return nice array
  - [ ] json exceptions
  - [ ] group member removal
  - [ ] pagination
