@@ -1,0 +1,779 @@
+{
+	"info": {
+		"_postman_id": "65bcae79-ee78-4eb8-92cc-f23f21913bb9",
+		"name": "SCIM Nextcloud App Collection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Groups",
+			"item": [
+				{
+					"name": "Create a single group",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 201\", () => {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test(\"Response body is not empty\", () => {",
+									"    pm.expect(pm.response.json()).to.not.be.empty;",
+									"});",
+									"",
+									"pm.test(\"Response body contains group with displayName \\\"createdtestgroup\\\"\", () => {",
+									"    pm.expect(pm.response.json().displayName).to.eql(\"createdtestgroup\");",
+									"});",
+									"",
+									"pm.test(\"Response body contains a valid non-null group ID (the ID of the group which was created)\", () => {",
+									"    pm.expect(pm.response.json().id).to.not.be.null;",
+									"});",
+									"",
+									"pm.collectionVariables.set(\"testGroupId\", pm.response.json().id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"displayName\": \"createdtestgroup\",\n    \"members\": []\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/Groups",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"Groups"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Read a single group",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 200\", () => {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response body is not empty\", () => {",
+									"    pm.expect(pm.response.json()).to.not.be.empty;",
+									"});",
+									"",
+									"pm.test(\"Response body contains the group ID of the group we want to read\", () => {",
+									"    pm.expect(pm.response.json().id).to.eql(pm.collectionVariables.get('testGroupId'));",
+									"});",
+									"",
+									"pm.test(\"Response body contains group with displayName \\\"createdtestgroup\\\"\", () => {",
+									"    pm.expect(pm.response.json().displayName).to.eql(\"createdtestgroup\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/Groups/{{testGroupId}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"Groups",
+								"{{testGroupId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Read all groups",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 200\", () => {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response body is not empty\", () => {",
+									"    pm.expect(pm.response.json().Resources).to.not.be.empty;",
+									"});",
+									"",
+									"pm.test(\"Response body contains group with displayName \\\"createdtestgroup\\\"\", () => {",
+									"    var resources = pm.response.json().Resources.map(x => x.displayName);",
+									"    pm.expect(resources).to.contain(\"createdtestgroup\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/Groups",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"Groups"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update a single group",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 200\", () => {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response body is not empty\", () => {",
+									"    pm.expect(pm.response.json()).to.not.be.empty;",
+									"});",
+									"",
+									"pm.test(\"Response body contains the group ID of the group we want to read\", () => {",
+									"    pm.expect(pm.response.json().id).to.eql(pm.collectionVariables.get('testGroupId'));",
+									"});",
+									"",
+									"pm.test(\"Response body contains group with displayName \\\"updatedtestgroup\\\"\", () => {",
+									"    pm.expect(pm.response.json().displayName).to.eql(\"updatedtestgroup\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"displayName\": \"updatedtestgroup\",\n    \"members\": []\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/Groups/{{testGroupId}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"Groups",
+								"{{testGroupId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete a single group",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 204\", () => {",
+									"    pm.response.to.have.status(204);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/Groups/{{testGroupId}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"Groups",
+								"{{testGroupId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "basic",
+				"basic": [
+					{
+						"key": "password",
+						"value": "admin",
+						"type": "string"
+					},
+					{
+						"key": "username",
+						"value": "admin",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "ResourceTypes",
+			"item": [
+				{
+					"name": "Read all ResourceTypes",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 200\", () => {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response body is not empty\", () => {",
+									"    pm.expect(pm.response.json().Resources).to.not.be.empty;",
+									"});",
+									"",
+									"pm.test(\"Response body contains exactly one entry\", () => {",
+									"    pm.expect(pm.response.json().Resources.length).to.eql(2);",
+									"});",
+									"",
+									"pm.test(\"Response body contains ResourceType with id \\\"User\\\"\", () => {",
+									"    pm.expect(pm.response.json().Resources[0].id).to.eql(\"User\");",
+									"});",
+									"",
+									"pm.test(\"Response body contains ResourceType with id \\\"Group\\\"\", () => {",
+									"    pm.expect(pm.response.json().Resources[1].id).to.eql(\"Group\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer: {{jwt_token}}",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/ResourceTypes",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"ResourceTypes"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Schemas",
+			"item": [
+				{
+					"name": "Read all Schemas",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 200\", () => {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response body is not empty\", () => {",
+									"    pm.expect(pm.response.json().Resources).to.not.be.empty;",
+									"});",
+									"",
+									"pm.test(\"Response body contains exactly four entries\", () => {",
+									"    pm.expect(pm.response.json().Resources.length).to.eql(4);",
+									"});",
+									"",
+									"pm.test(\"Response body contains Schema with id \\\"urn:ietf:params:scim:schemas:core:2.0:Group\\\"\", () => {",
+									"    pm.expect(pm.response.json().Resources[0].id).to.eql(\"urn:ietf:params:scim:schemas:core:2.0:Group\");",
+									"});",
+									"",
+									"pm.test(\"Response body contains Schema with id \\\"urn:ietf:params:scim:schemas:core:2.0:ResourceType\\\"\", () => {",
+									"    pm.expect(pm.response.json().Resources[1].id).to.eql(\"urn:ietf:params:scim:schemas:core:2.0:ResourceType\");",
+									"});",
+									"",
+									"pm.test(\"Response body contains Schema with id \\\"urn:ietf:params:scim:schemas:core:2.0:User\\\"\", () => {",
+									"    pm.expect(pm.response.json().Resources[2].id).to.eql(\"urn:ietf:params:scim:schemas:core:2.0:User\");",
+									"});",
+									"",
+									"pm.test(\"Response body contains Schema with id \\\"urn:ietf:params:scim:schemas:core:2.0:Schema\\\"\", () => {",
+									"    pm.expect(pm.response.json().Resources[3].id).to.eql(\"urn:ietf:params:scim:schemas:core:2.0:Schema\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer: {{jwt_token}}",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/Schemas",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"Schemas"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "ServiceProviderConfigs",
+			"item": [
+				{
+					"name": "Read all ServiceProviderConfigs",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 200\", () => {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response body is not empty\", () => {",
+									"    pm.expect(pm.response.json()).to.not.be.empty;",
+									"});",
+									"",
+									"pm.test(\"Response body contains a ServiceProviderConfig with a correct schema\", () => {",
+									"    pm.expect(pm.response.json().schemas).to.include(\"urn:ietf:params:scim:schemas:core:2.0:ServiceProviderConfig\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer: {{jwt_token}}",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/ServiceProviderConfig",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"ServiceProviderConfig"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Create a single user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 201\", () => {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test(\"Response body is not empty\", () => {",
+									"    pm.expect(pm.response.json()).to.not.be.empty;",
+									"});",
+									"",
+									"pm.test(\"Response body contains user with userName \\\"createdtestuser\\\"\", () => {",
+									"    pm.expect(pm.response.json().userName).to.eql(\"createdtestuser\");",
+									"});",
+									"",
+									"pm.test(\"Response body contains a valid non-null user ID (the ID of the user which was created)\", () => {",
+									"    pm.expect(pm.response.json().id).to.not.be.null;",
+									"});",
+									"",
+									"pm.collectionVariables.set(\"testUserId\", pm.response.json().id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"userName\": \"createdtestuser\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/Users",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"Users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Read a single user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 200\", () => {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response body is not empty\", () => {",
+									"    pm.expect(pm.response.json()).to.not.be.empty;",
+									"});",
+									"",
+									"pm.test(\"Response body contains the user ID of the user we want to read\", () => {",
+									"    pm.expect(pm.response.json().id).to.eql(pm.collectionVariables.get('testUserId'));",
+									"});",
+									"",
+									"pm.test(\"Response body contains user with userName \\\"createdtestuser\\\"\", () => {",
+									"    pm.expect(pm.response.json().userName).to.eql(\"createdtestuser\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/Users/{{testUserId}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"Users",
+								"{{testUserId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Read all users",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 200\", () => {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response body is not empty\", () => {",
+									"    pm.expect(pm.response.json().Resources).to.not.be.empty;",
+									"});",
+									"",
+									"pm.test(\"Response body contains user with userName \\\"createdtestuser\\\"\", () => {",
+									"    var resources = pm.response.json().Resources.map(x => x.userName);",
+									"    pm.expect(resources).to.contain(\"createdtestuser\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/Users",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"Users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update a single user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 200\", () => {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response body is not empty\", () => {",
+									"    pm.expect(pm.response.json()).to.not.be.empty;",
+									"});",
+									"",
+									"pm.test(\"Response body contains the user ID of the user we want to read\", () => {",
+									"    pm.expect(pm.response.json().id).to.eql(pm.collectionVariables.get('testUserId'));",
+									"});",
+									"",
+									"pm.test(\"Response body contains user with displayName \\\"updatedtestuser\\\"\", () => {",
+									"    pm.expect(pm.response.json().displayName).to.eql(\"updatedtestuser\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"displayName\": \"updatedtestuser\",\n    \"active\": false\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/Users/{{testUserId}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"Users",
+								"{{testUserId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete a single user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 204\", () => {",
+									"    pm.response.to.have.status(204);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"userName\": \"updatedtestuser\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/Users/{{testUserId}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"Users",
+								"{{testUserId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "basic",
+				"basic": [
+					{
+						"key": "password",
+						"value": "admin",
+						"type": "string"
+					},
+					{
+						"key": "username",
+						"value": "admin",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "basic",
+		"basic": [
+			{
+				"key": "password",
+				"value": "admin",
+				"type": "string"
+			},
+			{
+				"key": "username",
+				"value": "admin",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "testUserId",
+			"value": ""
+		},
+		{
+			"key": "testGroupId",
+			"value": ""
+		},
+		{
+			"key": "url",
+			"value": "http://localhost:8888/index.php/apps/scimserviceprovider",
+			"type": "default"
+		}
+	]
+}

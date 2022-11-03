@@ -12,5 +12,15 @@
     "scripts": {
         "cs:check": "php-cs-fixer fix --dry-run --diff",
         "cs:fix": "php-cs-fixer fix"
+    },
+    "minimum-stability": "dev",
+    "repositories": {
+        "scim": {
+            "type": "vcs",
+            "url": "git@github.com:audriga/scim-server-php.git"
+        }
+    },
+    "require": {
+        "audriga/scim-server-php": "dev-main"
     }
 }
