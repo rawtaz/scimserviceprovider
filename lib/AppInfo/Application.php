@@ -157,7 +157,5 @@ class Application extends App implements IBootstrap
      */
     public function boot(IBootContext $context): void
     {
-        // Set the supported SCIM resource types when booting the SCIM app
-        Util::setSupportedSCIMResourceTypes(['User', 'Group']);
     }
 }
