@@ -51,7 +51,7 @@ class Application extends App implements IBootstrap
      */
     public function register(IRegistrationContext $context): void
     {
-        require dirname(__DIR__) . '../../vendor/autoload.php';
+        require realpath(dirname(__DIR__) . '/../vendor/autoload.php');
         $config = require dirname(__DIR__) . '/Config/config.php';
         $context->registerService('SCIMUser', function(ContainerInterface $c) {
             return new SCIMUser(
