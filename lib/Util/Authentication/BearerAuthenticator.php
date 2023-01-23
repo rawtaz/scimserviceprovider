@@ -3,8 +3,8 @@
 namespace OCA\SCIMServiceProvider\Util\Authentication;
 
 use Exception;
-use Firebase\JWT\JWT;
-use Firebase\JWT\Key;
+use Opf\Vendor\Firebase\JWT\JWT;
+use Opf\Vendor\Firebase\JWT\Key;
 use OCA\SCIMServiceProvider\Util\Util;
 use OCP\IUserManager;
 use Opf\Util\Authentication\AuthenticatorInterface;
