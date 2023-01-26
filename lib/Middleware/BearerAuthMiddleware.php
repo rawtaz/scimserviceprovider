@@ -29,7 +29,20 @@ class BearerAuthMiddleware extends Middleware
 
     public function beforeController($controller, $methodName)
     {
+        $currentRoute =  $this->request->getParams()["_route"];
+        $publicRoutes = [
+            "scimserviceprovider.service_provider_configuration.resource_types",
+            "scimserviceprovider.service_provider_configuration.schemas",
+            "scimserviceprovider.service_provider_configuration.service_provider_config"
+        ];
+
+        // Don't require an auth header for public routes
+        if (in_array($currentRoute, $publicRoutes)) {
+            return;
+        }
+
         $authHeader = $this->request->getHeader('Authorization');
+
         if (empty($authHeader)) {
             throw new AuthException("No Authorization header supplied");
         }

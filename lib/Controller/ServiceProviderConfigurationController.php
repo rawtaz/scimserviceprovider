@@ -27,6 +27,7 @@ class ServiceProviderConfigurationController extends ApiController
 
     /**
      * @NoCSRFRequired
+     * @PublicPage
      */
     public function resourceTypes(): SCIMListResponse
     {
@@ -40,6 +41,7 @@ class ServiceProviderConfigurationController extends ApiController
 
     /**
      * @NoCSRFRequired
+     * @PublicPage
      */
     public function schemas(): SCIMListResponse
     {
@@ -49,6 +51,7 @@ class ServiceProviderConfigurationController extends ApiController
 
     /**
      * @NoCSRFRequired
+     * @PublicPage
      */
     public function serviceProviderConfig(): SCIMJSONResponse
     {
