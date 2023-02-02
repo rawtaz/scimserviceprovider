@@ -29,6 +29,7 @@
         }
     },
     "require": {
-        "audriga/scim-server-php": "dev-main"
+        "audriga/scim-server-php": "dev-main",
+        "doctrine/lexer": "^1.2"
     }
 }
