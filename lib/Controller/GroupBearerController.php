@@ -9,42 +9,44 @@ use OCP\AppFramework\Http\Response;
 use OCP\IRequest;
 use OCA\SCIMServiceProvider\Responses\SCIMListResponse;
 use OCA\SCIMServiceProvider\Responses\SCIMJSONResponse;
-use OCA\SCIMServiceProvider\Service\UserService;
+use OCA\SCIMServiceProvider\Service\GroupService;
 
-class UserController extends ApiController
+class GroupBearerController extends ApiController
 {
-    /** @var UserService */
-    private $userService;
+    /** @var GroupService */
+    private $groupService;
 
     public function __construct(
         string $appName,
         IRequest $request,
-        UserService $userService
+        GroupService $groupService
     ) {
         parent::__construct(
             $appName,
             $request
         );
 
-        $this->userService = $userService;
+        $this->groupService = $groupService;
     }
 
     /**
      * @NoCSRFRequired
+     * @PublicPage
      *
      * @param string $filter
      * @return SCIMListResponse
-     * returns a list of users and their data
+     * returns a list of groups and their data
      */
     public function index(string $filter = ''): SCIMListResponse
     {
-        return $this->userService->getAll($filter);
+        return $this->groupService->getAll($filter);
     }
 
     /**
      * @NoCSRFRequired
+     * @PublicPage
      *
-     * gets user info
+     * gets group info
      *
      * @param string $id
      * @return SCIMJSONResponse
@@ -52,64 +54,46 @@ class UserController extends ApiController
     // TODO: Add filtering support here as well
     public function show(string $id): SCIMJSONResponse
     {
-        return $this->userService->getOneById($id);
+        return $this->groupService->getOneById($id);
     }
 
     /**
      * @NoCSRFRequired
+     * @PublicPage
      *
-     * @param bool   $active
      * @param string $displayName
-     * @param array  $emails
-     * @param string $externalId
-     * @param string $userName
+     * @param array  $members
      * @return SCIMJSONResponse
      */
-    public function create(
-        bool $active = true,
-        string $displayName = '',
-        array $emails = [],
-        string $externalId = '',
-        string $userName = ''
-    ): SCIMJSONResponse
+    public function create(string $displayName = '', array $members = []): SCIMJSONResponse
     {
-        return $this->userService->create(
-            $active,
-            $displayName,
-            $emails,
-            $externalId,
-            $userName
-        );
+        return $this->groupService->create($displayName, $members);
     }
 
     /**
      * @NoCSRFRequired
+     * @PublicPage
      *
      * @param string $id
      *
-     * @param bool   $active
      * @param string $displayName
-     * @param array  $emails
+     * @param array  $members
      * @return SCIMJSONResponse
      */
-    public function update(
-        string $id,
-        bool $active,
-        string $displayName = '',
-        array $emails = []
-    ): SCIMJSONResponse
+    public function update(string $id, string $displayName = '', array $members = []): SCIMJSONResponse
     {
-        return $this->userService->update($id, $active, $displayName, $emails);
+        return $this->groupService->update($id, $displayName, $members);
     }
 
     /**
      * @NoCSRFRequired
+     * @PublicPage
      *
      * @param string $id
      * @return Response
      */
     public function destroy(string $id): Response
     {
-        return $this->userService->destroy($id);
+        return $this->groupService->destroy($id);
     }
 }

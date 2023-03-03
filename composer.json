@@ -11,6 +11,25 @@
     },
     "scripts": {
         "cs:check": "php-cs-fixer fix --dry-run --diff",
-        "cs:fix": "php-cs-fixer fix"
+        "cs:fix": "php-cs-fixer fix",
+        "post-install-cmd": [
+            "rm -rf vendor/firebase",
+            "composer dump-autoload"
+        ],
+        "post-update-cmd": [
+            "rm -rf vendor/firebase",
+            "composer dump-autoload"
+        ]
+    },
+    "minimum-stability": "dev",
+    "repositories": {
+        "scim": {
+            "type": "vcs",
+            "url": "git@github.com:audriga/scim-server-php.git"
+        }
+    },
+    "require": {
+        "audriga/scim-server-php": "dev-main",
+        "doctrine/lexer": "^1.2"
     }
 }
