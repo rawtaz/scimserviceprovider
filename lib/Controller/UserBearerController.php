@@ -11,10 +11,11 @@ use OCA\SCIMServiceProvider\Responses\SCIMListResponse;
 use OCA\SCIMServiceProvider\Responses\SCIMJSONResponse;
 use OCA\SCIMServiceProvider\Service\UserService;
 
-class UserController extends ApiController
+class UserBearerController extends ApiController
 {
     /** @var UserService */
     private $userService;
+
 
     public function __construct(
         string $appName,
@@ -31,6 +32,7 @@ class UserController extends ApiController
 
     /**
      * @NoCSRFRequired
+     * @PublicPage
      *
      * @param string $filter
      * @return SCIMListResponse
@@ -43,6 +45,7 @@ class UserController extends ApiController
 
     /**
      * @NoCSRFRequired
+     * @PublicPage
      *
      * gets user info
      *
@@ -57,6 +60,7 @@ class UserController extends ApiController
 
     /**
      * @NoCSRFRequired
+     * @PublicPage
      *
      * @param bool   $active
      * @param string $displayName
@@ -84,6 +88,7 @@ class UserController extends ApiController
 
     /**
      * @NoCSRFRequired
+     * @PublicPage
      *
      * @param string $id
      *
@@ -104,6 +109,7 @@ class UserController extends ApiController
 
     /**
      * @NoCSRFRequired
+     * @PublicPage
      *
      * @param string $id
      * @return Response
