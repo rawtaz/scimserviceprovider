@@ -34,7 +34,7 @@ class NextcloudGroupAdapter extends AbstractAdapter
      */
     public function getCoreGroup(?IGroup $ncGroup): ?CoreGroup
     {
-        $this->logger->info(
+        $this->logger->debug(
             "[" . NextcloudGroupAdapter::class . "] entering getCoreGroup() method"
         );
 
@@ -80,7 +80,7 @@ class NextcloudGroupAdapter extends AbstractAdapter
      */
     public function getNCGroup(?CoreGroup $coreGroup, IGroup $ncGroup): ?IGroup
     {
-        $this->logger->info(
+        $this->logger->debug(
             "[" . NextcloudGroupAdapter::class . "] entering getNCGroup() method"
         );
 

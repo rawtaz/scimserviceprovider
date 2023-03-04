@@ -41,7 +41,7 @@ class NextcloudUserAdapter extends AbstractAdapter
      */
     public function getCoreUser(?IUser $ncUser): ?CoreUser
     {
-        $this->logger->info(
+        $this->logger->debug(
             "[" . NextcloudUserAdapter::class . "] entering getCoreUser() method"
         );
 
@@ -86,7 +86,7 @@ class NextcloudUserAdapter extends AbstractAdapter
      */
     public function getNCUser(?CoreUser $coreUser, IUser $ncUser): ?IUser
     {
-        $this->logger->info(
+        $this->logger->debug(
             "[" . NextcloudUserAdapter::class . "] entering getNCUser() method"
         );
 
