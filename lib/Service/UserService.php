@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace OCA\SCIMServiceProvider\Service;
 
 use Exception;
+use OCA\SCIMServiceProvider\AppInfo\Application;
 use OCA\SCIMServiceProvider\Responses\SCIMErrorResponse;
 use OCA\SCIMServiceProvider\Responses\SCIMJSONResponse;
 use OCA\SCIMServiceProvider\Responses\SCIMListResponse;
@@ -94,7 +95,7 @@ class UserService
                 return new SCIMErrorResponse(['message' => 'Creating user failed'], 400);
             }
         } catch (Exception $e) {
-            $this->logger->warning('Failed createUser attempt with SCIMException exeption.', ['app' => 'SCIMServiceProvider']);
+            $this->logger->warning('Failed createUser attempt with SCIMException exeption.', ['app' => Application::APP_ID]);
             throw $e;
         }
     }

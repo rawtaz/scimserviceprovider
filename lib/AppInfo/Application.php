@@ -36,7 +36,7 @@ use Psr\Container\ContainerInterface;
  */
 class Application extends App implements IBootstrap
 {
-    public const APP_ID = 'SCIMServiceProvider';
+    public const APP_ID = 'scimserviceprovider';
 
     public function __construct(array $urlParams = [])
     {

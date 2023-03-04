@@ -2,6 +2,7 @@
 
 namespace OCA\SCIMServiceProvider\Adapter\Users;
 
+use OCA\SCIMServiceProvider\AppInfo\Application;
 use OCP\IConfig;
 use OCP\IUser;
 use OCP\IUserManager;
@@ -63,7 +64,7 @@ class NextcloudUserAdapter extends AbstractAdapter
         $coreUser->setDisplayName($ncUser->getDisplayName());
         $coreUser->setActive($ncUser->isEnabled());
 
-		$ncUserExternalId = $this->config->getUserValue($ncUser->getUID(), 'SCIMServiceProvider', 'ExternalId', '');
+		$ncUserExternalId = $this->config->getUserValue($ncUser->getUID(), Application::APP_ID, 'externalId', '');
         $coreUser->setExternalId($ncUserExternalId);
 
         if ($ncUser->getEMailAddress() !== null && !empty($ncUser->getEMailAddress())) {
@@ -106,7 +107,7 @@ class NextcloudUserAdapter extends AbstractAdapter
         }
 
         if ($coreUser->getExternalId() !== null && !empty($coreUser->getExternalId())) {
-            $this->config->setUserValue($ncUser->getUID(), 'SCIMServiceProvider', 'ExternalId', $coreUser->getExternalId());
+            $this->config->setUserValue($ncUser->getUID(), Application::APP_ID, 'externalId', $coreUser->getExternalId());
         }
 
         if ($coreUser->getEmails() !== null && !empty($coreUser->getEmails())) {

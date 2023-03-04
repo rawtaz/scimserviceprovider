@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace OCA\SCIMServiceProvider\Service;
 
 use Exception;
+use OCA\SCIMServiceProvider\AppInfo\Application;
 use OCA\SCIMServiceProvider\Responses\SCIMErrorResponse;
 use OCA\SCIMServiceProvider\Responses\SCIMJSONResponse;
 use OCA\SCIMServiceProvider\Responses\SCIMListResponse;
@@ -102,7 +103,7 @@ class GroupService
                 return new SCIMErrorResponse(['message' => 'Creating group failed'], 400);
             }
         } catch (Exception $e) {
-            $this->logger->warning('Failed createGroup attempt with SCIMException exception.', ['app' => 'SCIMServiceProvider']);
+            $this->logger->warning('Failed createGroup attempt with SCIMException exception.', ['app' => Application::APP_ID]);
             throw $e;
         }
     }

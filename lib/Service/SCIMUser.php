@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace OCA\SCIMServiceProvider\Service;
 
+use OCA\SCIMServiceProvider\AppInfo\Application;
 use OCP\IConfig;
 use OCP\IUserManager;
 
@@ -35,7 +36,7 @@ class SCIMUser {
 		}
 
 		$enabled = $this->config->getUserValue($targetUserObject->getUID(), 'core', 'enabled', 'true') === 'true';
-		$externalId = $this->config->getUserValue($targetUserObject->getUID(), 'SCIMServiceProvider', 'ExternalId', '');
+		$externalId = $this->config->getUserValue($targetUserObject->getUID(), Application::APP_ID, 'externalId', '');
 		$email = $targetUserObject->getSystemEMailAddress();
 
 
@@ -78,7 +79,7 @@ class SCIMUser {
 	 * @throws Exception
 	 */
 	public function setExternalId(string $userId, string $externalId) {
-		$this->config->setUserValue($userId, 'SCIMServiceProvider', 'ExternalId', $externalId);
+		$this->config->setUserValue($userId, Application::APP_ID, 'externalId', $externalId);
 	}
 
 }
