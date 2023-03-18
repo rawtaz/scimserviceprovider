@@ -17,6 +17,7 @@ if (isset($config['auth_type']) && !empty($config['auth_type']) && (strcmp($conf
 			['name' => 'user_bearer#show', 'url' => '/bearer/Users/{id}', 'verb' => 'GET'],
 			['name' => 'user_bearer#create', 'url' => '/bearer/Users', 'verb' => 'POST'],
 			['name' => 'user_bearer#update', 'url' => '/bearer/Users/{id}', 'verb' => 'PUT'],
+			['name' => 'user_bearer#patch', 'url' => '/bearer/Users/{id}', 'verb' => 'PATCH'],
 			['name' => 'user_bearer#destroy', 'url' => '/bearer/Users/{id}', 'verb' => 'DELETE'],
 
 			['name' => 'group_bearer#index', 'url' => '/bearer/Groups', 'verb' => 'GET'],
@@ -31,6 +32,7 @@ if (isset($config['auth_type']) && !empty($config['auth_type']) && (strcmp($conf
 			['name' => 'user#show', 'url' => '/Users/{id}', 'verb' => 'GET'],
 			['name' => 'user#create', 'url' => '/Users', 'verb' => 'POST'],
 			['name' => 'user#update', 'url' => '/Users/{id}', 'verb' => 'PUT'],
+			['name' => 'user#patch', 'url' => '/Users/{id}', 'verb' => 'PATCH'],
 			['name' => 'user#destroy', 'url' => '/Users/{id}', 'verb' => 'DELETE'],
 	
 			['name' => 'group#index', 'url' => '/Groups', 'verb' => 'GET'],

@@ -106,6 +106,22 @@ class UserController extends ApiController
      * @NoCSRFRequired
      *
      * @param string $id
+     *
+     * @param array  $operations
+     * @return SCIMJSONResponse
+     */
+    public function patch(
+        string $id,
+        array $Operations
+    ): SCIMJSONResponse
+    {
+        return $this->userService->patch($id, $Operations);
+    }
+
+    /**
+     * @NoCSRFRequired
+     *
+     * @param string $id
      * @return Response
      */
     public function destroy(string $id): Response

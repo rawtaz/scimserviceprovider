@@ -132,6 +132,58 @@ class UserService
         }
     }
 
+    public function patch(
+        string $id,
+        array $operations
+    ): SCIMJSONResponse
+    {
+        $this->logger->info("Patching user with ID: " . $id);
+
+        $baseUrl = $this->request->getServerProtocol() . "://" . $this->request->getServerHost() . Util::SCIM_APP_URL_PATH;
+
+        $user = $this->repository->getOneById($id);
+        if (!isset($user) || empty($user)) {
+            $this->logger->error("User with ID " . $id . " not found for patch");
+            return new SCIMErrorResponse(['message' => 'User not found'], 404);
+        }
+
+        $data = [];
+        foreach($operations as $operation) {
+            if(in_array($operation['op'], ['Add', 'Replace'])) {
+                $path = $operation['path'];
+                if($path == 'active') {
+                    $data['active'] = filter_var($operation['value'], FILTER_VALIDATE_BOOLEAN);
+                }
+                else if($path == 'displayName') {
+                    $data['displayName'] = $operation['value'];
+                }
+                // TODO: For now we don't support adding or changing e-mail
+                //  addresses, simply because 1) there is only one single
+                //  e-mail address supported in Nextcloud, and 2) the username
+                //  and e-mail address should be the same for SCIM-provisioned
+                //  users. To support changing of e-mail and/or username, we
+                //  need to create a new correponding user, migrate the old
+                //  user's data to the new one, accept the migration, then
+                //  delete the old user.
+                // else if(preg_match('{^emails\b.*\.value$}', $path)) {
+                //     $data['emails'] = [
+                //         'primary' => true,
+                //         'type' => 'work',
+                //         'value' => $operation['value'],
+                //     ];
+                // }
+            }
+        }
+
+        $patchedUser = $this->repository->update($id, $data);
+        if (isset($patchedUser) && !empty($patchedUser)) {
+            return new SCIMJSONResponse($patchedUser->toSCIM(false, $baseUrl));
+        } else {
+            $this->logger->error("Patching user with ID " . $id . " failed");
+            return new SCIMErrorResponse(['message' => 'Patching user failed'], 400);
+        }
+    }
+
     public function destroy(string $id): Response
     {
         $this->logger->info("Deleting user with ID: " . $id);
