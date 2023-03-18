@@ -11,12 +11,17 @@ use OCA\SCIMServiceProvider\Responses\SCIMJSONResponse;
 use OCA\SCIMServiceProvider\Responses\SCIMListResponse;
 use OCA\SCIMServiceProvider\Util\Util;
 use OCP\AppFramework\Http\Response;
+use OCP\IConfig;
 use OCP\IRequest;
+use Opf\Models\SCIM\Standard\Users\CoreUser;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 
 class UserService
 {
+    /** @var IConfig */
+    private $config;
+
     /** @var LoggerInterface */
     private $logger;
 
@@ -28,6 +33,7 @@ class UserService
 
     public function __construct(ContainerInterface $container)
     {
+        $this->config = $container->get(IConfig::class);
         $this->logger = $container->get(LoggerInterface::class);
         $this->repository = $container->get('UserRepository');
         $this->request = $container->get(IRequest::class);
@@ -89,6 +95,7 @@ class UserService
 
             $createdUser = $this->repository->create($data);
             if (isset($createdUser) && !empty($createdUser)) {
+                $this->saveEnterpriseExtensionData($createdUser, $this->request->getParam('urn:ietf:params:scim:schemas:extension:enterprise:2.0:User'));
                 return new SCIMJSONResponse($createdUser->toSCIM(false, $baseUrl), 201);
             } else {
                 $this->logger->error("Creating user failed");
@@ -125,6 +132,7 @@ class UserService
 
         $updatedUser = $this->repository->update($id, $data);
         if (isset($updatedUser) && !empty($updatedUser)) {
+            $this->saveEnterpriseExtensionData($updatedUser, $this->request->getParam('urn:ietf:params:scim:schemas:extension:enterprise:2.0:User'));
             return new SCIMJSONResponse($updatedUser->toSCIM(false, $baseUrl));
         } else {
             $this->logger->error("Updating user with ID " . $id . " failed");
@@ -172,11 +180,18 @@ class UserService
                 //         'value' => $operation['value'],
                 //     ];
                 // }
+                else if($path == 'urn:ietf:params:scim:schemas:extension:enterprise:2.0:User:organization') {
+                    $data['organization'] = $operation['value'];
+                }
+                else if($path == 'urn:ietf:params:scim:schemas:extension:enterprise:2.0:User:manager') {
+                    $data['manager'] = $operation['value'];
+                }
             }
         }
 
         $patchedUser = $this->repository->update($id, $data);
         if (isset($patchedUser) && !empty($patchedUser)) {
+            $this->saveEnterpriseExtensionData($patchedUser, $data);
             return new SCIMJSONResponse($patchedUser->toSCIM(false, $baseUrl));
         } else {
             $this->logger->error("Patching user with ID " . $id . " failed");
@@ -197,6 +212,15 @@ class UserService
         } else {
             $this->logger->error("Deletion of user with ID " . $id . " failed");
             return new SCIMErrorResponse(['message' => 'Couldn\'t delete user'], 503);
+        }
+    }
+
+    protected function saveEnterpriseExtensionData(CoreUser $coreUser, $data) {
+        if(isset($data['organization'])) {
+            $this->config->setUserValue($coreUser->getId(), Application::APP_ID, 'enterprise:organization', $data['organization']);
+        }
+        if(isset($data['manager'])) {
+            $this->config->setUserValue($coreUser->getId(), Application::APP_ID, 'enterprise:manager', $data['manager']);
         }
     }
 }
