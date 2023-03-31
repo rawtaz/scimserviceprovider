@@ -12,6 +12,6 @@
     <category>integration</category>
     <bugs>https://lab.libreho.st/libre.sh/docker/nextcloud/</bugs>
     <dependencies>
-        <nextcloud min-version="22" max-version="22"/>
+        <nextcloud min-version="22" max-version="25"/>
     </dependencies>
 </info>
