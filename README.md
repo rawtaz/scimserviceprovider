@@ -30,12 +30,14 @@ You can see the [video](https://hot-objects.liiib.re/meet-liiib-re-recordings/pa
 We plan to publish on the Nextcloud app store, but in the mean time you can use instructions bellow.
 
 ```
-cd apps
+cd custom_apps
 wget https://lab.libreho.st/libre.sh/scim/nextcloud-scim/-/archive/main/nextcloud-scim-main.zip
 unzip nextcloud-scim-main.zip
 rm nextcloud-scim-main.zip
 rm -rf scimserviceprovider
 mv nextcloud-scim-main scimserviceprovider
+cd scimserviceprovider
+composer install
 ```
 
 ### Authentication
